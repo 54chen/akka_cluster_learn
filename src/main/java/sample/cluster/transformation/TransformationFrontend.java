@@ -7,6 +7,8 @@ import java.util.List;
 
 import sample.cluster.transformation.TransformationMessages.JobFailed;
 import sample.cluster.transformation.TransformationMessages.TransformationJob;
+import sample.cluster.transformation.TransformationMessages.TransformationResult;
+
 import akka.actor.ActorRef;
 import akka.actor.Terminated;
 import akka.actor.UntypedActor;
@@ -19,6 +21,11 @@ public class TransformationFrontend extends UntypedActor {
 
   @Override
   public void onReceive(Object message) {
+
+    if (message  instanceof TransformationResult) {
+        System.out.println("I am here " + message);
+    }
+
     if ((message instanceof TransformationJob) && backends.isEmpty()) {
       TransformationJob job = (TransformationJob) message;
       getSender().tell(

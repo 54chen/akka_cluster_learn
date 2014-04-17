@@ -34,13 +34,16 @@ public class TransformationFrontendMain {
     final Timeout timeout = new Timeout(Duration.create(5, TimeUnit.SECONDS));
     final ExecutionContext ec = system.dispatcher();
     final AtomicInteger counter = new AtomicInteger();
+
     system.scheduler().schedule(interval, interval, new Runnable() {
       public void run() {
+
         ask(frontend,
             new TransformationJob("hello-" + counter.incrementAndGet()),
             timeout).onSuccess(new OnSuccess<Object>() {
           public void onSuccess(Object result) {
             System.out.println(result);
+            frontend.tell(result,frontend);
           }
         }, ec);
       }
